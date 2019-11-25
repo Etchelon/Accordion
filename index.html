@@ -16,15 +16,22 @@
 		<script type="text/javascript">
 			const options = {
 				container: "js-accordion",
-				mainTitle: Math.random() > 0.5 ? "Manage your account" : null,
+				mainTitle: "Manage your account",
 				panels: [{
 					title: "My profile",
 					subtitle: "Update your profile information",
-					content: "<p>HTML content for this panel</p>"
+					content: "<div>HTML content for this panel</div>"
 				}, {
 					title: "Change password",
-					subtitle: null,
-					content: "<p>HTML content for this panel</p>"
+					subtitle: "Change password to login to the CMS",
+					content: "<section>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</section>"
+				}, {
+					title: "Preferences",
+					subtitle: "Set your language and timezone preferences",
+					content: "<section>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</section>"
+				}, {
+					title: "No description title",
+					content: "<section>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</section>"
 				}]
 			};
 			const accordion = new Accordion(options);

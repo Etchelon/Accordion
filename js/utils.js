@@ -6,7 +6,16 @@
  * @returns {boolean}
  */
 function isNil(value) {
-  return value === void 0 || value === null;
+	return value === void 0 || value === null;
 }
 
-const identity = value => value;
+/**
+ * Assert that a condition is true, and throw an error message otherwise
+ * @param {boolean} condition The condition that should be true
+ * @param {string} message The error message if the assertion fails
+ */
+function assert(condition, message) {
+	if (!condition) {
+		throw new Error(message);
+	}
+}

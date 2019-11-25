@@ -36,7 +36,7 @@
 		</div>
 		<div class="content">PANEL_CONTENT</div>
 	</div>`,
-		descriptionTemplate: '<div class="description">PANEL_DESCRIPTION</div>'
+		descriptionTemplate: '<div class="description ellipsify">PANEL_DESCRIPTION</div>'
 	};
 
 	/**
@@ -55,6 +55,12 @@
 		 * @type {HTMLElement}
 		 */
 		_host = null;
+
+		/**
+		 * @private The currently open panel in the Accordion
+		 * @type {HTMLElement}
+		 */
+		_openedPanel = null;
 
 		/**
 		 * The constructor, which takes a mandatory configuration object
@@ -148,7 +154,6 @@
 				.replace("DESCRIPTION_CLASS", hasDescription ? "with-description" : "")
 				.replace("DESCRIPTION_PLACEHOLDER", hasDescription ? TEMPLATES.descriptionTemplate.replace("PANEL_DESCRIPTION", panel.subtitle) : "")
 				.replace("PANEL_CONTENT", panel.content);
-			console.info("Rendering a panel. Output: ", renderedPanel);
 			return renderedPanel;
 		}
 
@@ -156,12 +161,23 @@
 		 * @private Attach event handlers to the interactive elements in the panel (e.g.: the toggle)
 		 */
 		_attachListeners() {
+			const that = this;
 			const togglePanel = panel => evt => {
 				const panelClassAttr = panel.getAttribute("class");
 				const panelClasses = panelClassAttr.split(" ");
-				const isOpen = panelClasses.includes("open");
+				let isOpen = panelClasses.includes("open");
 				const newClassAttr = (isOpen ? panelClasses.filter(c => c !== "open") : panelClasses.concat("open")).join(" ");
 				panel.setAttribute("class", newClassAttr);
+				isOpen = !isOpen; // Now the actual status of the DOM element has changed
+				const contentWrapper = panel.getElementsByClassName("content").item(0);
+				const actualContent = contentWrapper.querySelector("*");
+				if (isOpen) {
+					// CSS Height is auto for contents in open panels, need to set it explicitly to trigger the CSS transition
+					const height = actualContent.getBoundingClientRect().height;
+					contentWrapper.style.height = `${height}px`;
+				} else {
+					contentWrapper.style.height = "";
+				}
 			};
 			const panels = this._host.getElementsByClassName("panel");
 			for (let i = 0; i < panels.length; ++i) {
@@ -169,6 +185,73 @@
 				const toggle = panel.getElementsByClassName("icon").item(0); // .toggle is always visible
 				toggle.addEventListener("click", togglePanel(panel));
 			}
+		}
+
+		_closeOpenPanel() {
+			if (isNil(this._openedPanel)) {
+				return;
+			}
+			this._closePanel(this._openedPanel);
+			this._openedPanel = null;
+		}
+
+		/**
+		 * @private Checks whether the supplied panel is open
+		 * @param {HTMLElement} panel The panel to test
+		 */
+		_isOpen(panel) {
+			const panelClassAttr = panel.getAttribute("class");
+			const panelClasses = panelClassAttr.split(" ");
+			return panelClasses.includes("open");
+		}
+
+		/**
+		 * @private Toggles the supplied panel
+		 * @param {HTMLElement} panel The panel to toggle
+		 */
+		_togglePanel(panel) {
+			const isOpen = this._isOpen(panel);
+			if (isOpen) {
+				assert(panel === this._openedPanel);
+				this._closeOpenPanel();
+			} else {
+				this._openPanel(panel);
+			}
+		}
+
+		/**
+		 * @private Opens the supplied panel
+		 * @param {HTMLElement} panel The panel to open
+		 */
+		_openPanel(panel) {
+			if (this._isOpen(panel)) {
+				return;
+			}
+			const panelClassAttr = panel.getAttribute("class");
+			const panelClasses = panelClassAttr.split(" ");
+			const newClassAttr = panelClasses.concat("open").join(" ");
+			panel.setAttribute("class", newClassAttr);
+			const contentWrapper = panel.getElementsByClassName("content").item(0);
+			const actualContent = contentWrapper.querySelector("*");
+			const height = actualContent.getBoundingClientRect().height;
+			contentWrapper.style.height = `${height}px`;
+			this._openedPanel = panel;
+		}
+
+		/**
+		 * @private Closes the supplied panel
+		 * @param {HTMLElement} panel The panel to close
+		 */
+		_closePanel(panel) {
+			if (!this._isOpen(panel)) {
+				return;
+			}
+			const panelClassAttr = panel.getAttribute("class");
+			const panelClasses = panelClassAttr.split(" ");
+			const newClassAttr = panelClasses.filter(c => c !== "open").join(" ");
+			panel.setAttribute("class", newClassAttr);
+			const contentWrapper = panel.getElementsByClassName("content").item(0);
+			contentWrapper.style.height = "";
 		}
 	}
 
