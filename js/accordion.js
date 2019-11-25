@@ -45,28 +45,28 @@
 	 */
 	class Accordion {
 		/**
-		 * @private The options provided
-		 * @type {AccordionOptions}
-		 */
-		_options = null;
-
-		/**
-		 * @private The host element of the Accordion
-		 * @type {HTMLElement}
-		 */
-		_host = null;
-
-		/**
-		 * @private The currently open panel in the Accordion
-		 * @type {HTMLElement}
-		 */
-		_openedPanel = null;
-
-		/**
 		 * The constructor, which takes a mandatory configuration object
 		 * @param {AccordionOptions} options the configuration options for the accordion
 		 */
 		constructor(options) {
+			/**
+			 * @private @member The options provided
+			 * @type {AccordionOptions}
+			 */
+			this._options = null;
+
+			/**
+			 * @private @member The host element of the Accordion
+			 * @type {HTMLElement}
+			 */
+			this._host = null;
+
+			/**
+			 * @private @member The currently open panel in the Accordion
+			 * @type {HTMLElement}
+			 */
+			this._openedPanel = null;
+
 			this._setOptions(options);
 			this._render();
 			this._attachListeners();
