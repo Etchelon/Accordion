@@ -170,6 +170,9 @@
 			}
 		}
 
+		/**
+		 * @private Closes the currently opened panel, if any
+		 */
 		_closeOpenPanel() {
 			if (isNil(this._openedPanel)) {
 				return;
