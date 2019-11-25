@@ -1,0 +1,33 @@
+<html>
+	<head>
+		<title>Accordion demo page</title>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+		<link rel="stylesheet" href="/css/accordion.css">
+		<link rel="stylesheet" href="/css/styles.css">
+		<script type="text/javascript" src="./js/utils.js"></script>
+		<script type="text/javascript" src="./js/accordion.js"></script>
+	</head>
+
+	<body>
+		<h1>Vanilla JS Accordion demo page</h1>
+		<div id="js-accordion"></div>
+
+		<script type="text/javascript">
+			const options = {
+				container: "js-accordion",
+				mainTitle: Math.random() > 0.5 ? "Manage your account" : null,
+				panels: [{
+					title: "My profile",
+					subtitle: "Update your profile information",
+					content: "<p>HTML content for this panel</p>"
+				}, {
+					// title: "Change password",
+					subtitle: null,
+					content: "<p>HTML content for this panel</p>"
+				}]
+			};
+			const accordion = new Accordion(options);
+		</script>
+	</body>
+</html>
