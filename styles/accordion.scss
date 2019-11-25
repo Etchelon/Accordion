@@ -57,7 +57,7 @@ $yMargin: 30px;
 				.title {
 					font: {
 						size: 14px;
-						weight: 300;
+						weight: bold;
 					}
 					color: $textBlueColor;
 					transition: font-size 0.5s ease-out;
@@ -67,6 +67,7 @@ $yMargin: 30px;
 					color: #999;
 					font: {
 						size: 12px;
+						weight: bold;
 					}
 				}
 			}

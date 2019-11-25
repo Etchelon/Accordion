@@ -161,29 +161,12 @@
 		 * @private Attach event handlers to the interactive elements in the panel (e.g.: the toggle)
 		 */
 		_attachListeners() {
-			const that = this;
-			const togglePanel = panel => evt => {
-				const panelClassAttr = panel.getAttribute("class");
-				const panelClasses = panelClassAttr.split(" ");
-				let isOpen = panelClasses.includes("open");
-				const newClassAttr = (isOpen ? panelClasses.filter(c => c !== "open") : panelClasses.concat("open")).join(" ");
-				panel.setAttribute("class", newClassAttr);
-				isOpen = !isOpen; // Now the actual status of the DOM element has changed
-				const contentWrapper = panel.getElementsByClassName("content").item(0);
-				const actualContent = contentWrapper.querySelector("*");
-				if (isOpen) {
-					// CSS Height is auto for contents in open panels, need to set it explicitly to trigger the CSS transition
-					const height = actualContent.getBoundingClientRect().height;
-					contentWrapper.style.height = `${height}px`;
-				} else {
-					contentWrapper.style.height = "";
-				}
-			};
+			const listener = panel => evt => this._togglePanel(panel);
 			const panels = this._host.getElementsByClassName("panel");
 			for (let i = 0; i < panels.length; ++i) {
 				const panel = panels.item(i);
 				const toggle = panel.getElementsByClassName("icon").item(0); // .toggle is always visible
-				toggle.addEventListener("click", togglePanel(panel));
+				toggle.addEventListener("click", listener(panel));
 			}
 		}
 
@@ -215,6 +198,7 @@
 				assert(panel === this._openedPanel);
 				this._closeOpenPanel();
 			} else {
+				this._closeOpenPanel();
 				this._openPanel(panel);
 			}
 		}
