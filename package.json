@@ -1,0 +1,10 @@
+{
+	"name": "js-accordion",
+	"version": "0.1.0",
+	"scripts": {
+		"scss": "node ./node_modules/node-sass/bin/node-sass --watch styles -o css"
+	},
+	"devDependencies": {
+		"node-sass": "^4.13.0"
+	}
+}

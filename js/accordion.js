@@ -1,7 +1,7 @@
 /**
  * @typedef {Object} AccordionPanel
  * @property {string} title - The (mandatory) title of the panel
- * @property {string} [description] - The (mandatory) title of the panel
+ * @property {string} [subtitle] - The (mandatory) title of the panel
  * @property {string} content - The (mandatory) HTML content of the panel
  */
 
@@ -24,14 +24,14 @@
 	const TEMPLATES = {
 		headerTemplate: '<div class="header">HEADER_TITLE</div>',
 		panelTemplate: `
-	<div class="panel closed DESCRIPTION_CLASS">
+	<div class="panel DESCRIPTION_CLASS">
 		<div class="header">
 			<div class="text">
 				<div class="title">PANEL_TITLE</div>
 				DESCRIPTION_PLACEHOLDER
 			</div>
 			<div class="toggle">
-				<i class="material-icons">expand_more</i>
+				<i class="icon material-icons">expand_more</i>
 			</div>
 		</div>
 		<div class="content">PANEL_CONTENT</div>
@@ -63,6 +63,7 @@
 		constructor(options) {
 			this._setOptions(options);
 			this._render();
+			this._attachListeners();
 		}
 
 		/**
@@ -125,8 +126,8 @@
 			const container = document.getElementById(selector);
 			container.setAttribute("class", "js-accordion");
 			let innerHTML = "";
-			const hasTitle = !isNil(this._options.mainTitle);
-			if (hasTitle) {
+			const hasHeader = !isNil(this._options.mainTitle);
+			if (hasHeader) {
 				innerHTML += TEMPLATES.headerTemplate.replace("HEADER_TITLE", this._options.mainTitle);
 			}
 			const panelElements = this._options.panels.map(this._renderPanel);
@@ -136,23 +137,38 @@
 		}
 
 		/**
-		 * Render the provided panel
-		 * @private
+		 * @private Render the provided panel
 		 * @param {AccordionPanel} panel The panel to render
 		 * @returns {string} The HTML string representing the panel instance
 		 */
 		_renderPanel(panel) {
-			const hasDescription = panel.description;
+			const hasDescription = panel.subtitle;
 			let renderedPanel = TEMPLATES.panelTemplate
 				.replace("PANEL_TITLE", panel.title)
-				.replace("DESCRIPTION_CLASS", hasDescription ? "with-description" : "without-description")
-				.replace(
-					"DESCRIPTION_PLACEHOLDER",
-					hasDescription ? TEMPLATES.descriptionTemplate.replace("PANEL_DESCRIPTION", panel.description) : ""
-				)
+				.replace("DESCRIPTION_CLASS", hasDescription ? "with-description" : "")
+				.replace("DESCRIPTION_PLACEHOLDER", hasDescription ? TEMPLATES.descriptionTemplate.replace("PANEL_DESCRIPTION", panel.subtitle) : "")
 				.replace("PANEL_CONTENT", panel.content);
 			console.info("Rendering a panel. Output: ", renderedPanel);
 			return renderedPanel;
+		}
+
+		/**
+		 * @private Attach event handlers to the interactive elements in the panel (e.g.: the toggle)
+		 */
+		_attachListeners() {
+			const togglePanel = panel => evt => {
+				const panelClassAttr = panel.getAttribute("class");
+				const panelClasses = panelClassAttr.split(" ");
+				const isOpen = panelClasses.includes("open");
+				const newClassAttr = (isOpen ? panelClasses.filter(c => c !== "open") : panelClasses.concat("open")).join(" ");
+				panel.setAttribute("class", newClassAttr);
+			};
+			const panels = this._host.getElementsByClassName("panel");
+			for (let i = 0; i < panels.length; ++i) {
+				const panel = panels.item(i);
+				const toggle = panel.getElementsByClassName("icon").item(0); // .toggle is always visible
+				toggle.addEventListener("click", togglePanel(panel));
+			}
 		}
 	}
 
