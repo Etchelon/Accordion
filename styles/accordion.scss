@@ -1,5 +1,6 @@
 $textColor: #333;
 $textBlueColor: #0465ac;
+$textMutedColor: #999;
 $headerHeight: 60px;
 $panelWithoutDescriptionHeight: 50px;
 $panelWithDescriptionHeight: 70px;
@@ -64,7 +65,7 @@ $yMargin: 30px;
 				}
 				.description {
 					margin-top: 12px;
-					color: #999;
+					color: $textMutedColor;
 					font: {
 						size: 12px;
 						weight: bold;
@@ -103,7 +104,6 @@ $yMargin: 30px;
 				}
 			}
 			> .content {
-				// height: auto;
 				margin: {
 					top: 12px;
 					bottom: $contentYMargin;
