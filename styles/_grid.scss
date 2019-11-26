@@ -1,0 +1,58 @@
+$containerPadding: 25px;
+$columnSpacing: 30px;
+$nColumns: 12;
+
+.fluid-container {
+	width: 100%;
+	padding: 0 $containerPadding;
+	margin: 0 auto;
+}
+
+.container-row {
+	display: flex;
+	flex-wrap: wrap;
+	margin: {
+		left: -$columnSpacing / 2;
+		right: -$columnSpacing / 2;
+	}
+}
+
+@media (max-width: 840px) {
+	.fluid-container {
+		max-width: 840px;
+	}
+
+	$nColumns: 8;
+	@for $i from 1 through 12 {
+		.w-#{$i} {
+			@if $i <= $nColumns {
+				margin-bottom: $columnSpacing / 2;
+				padding: {
+					left: $columnSpacing / 2;
+					right: $columnSpacing / 2;
+				}
+				width: percentage($i/$nColumns);
+			} @else {
+				display: none;
+			}
+		}
+	}
+}
+
+@media (min-width: 840px) {
+	.fluid-container {
+		max-width: 1366px;
+	}
+
+	$nColumns: 12;
+	@for $i from 1 through 12 {
+		.w-#{$i} {
+			margin-bottom: $columnSpacing / 2;
+			padding: {
+				left: $columnSpacing / 2;
+				right: $columnSpacing / 2;
+			}
+			width: percentage($i/$nColumns);
+		}
+	}
+}
