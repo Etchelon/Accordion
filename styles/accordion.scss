@@ -105,6 +105,11 @@ $yMargin: 30px;
 					bottom: $contentYMargin;
 				}
 			}
+			&:not(.transitioning) {
+				> .content {
+					height: auto;
+				}
+			}
 		}
 	}
 }

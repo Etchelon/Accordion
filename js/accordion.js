@@ -21,6 +21,7 @@
 (function() {
 	"use strict";
 
+	const TRANSITION_DURATION_MS = 500;
 	const TEMPLATES = {
 		headerTemplate: '<div class="header">HEADER_TITLE</div>',
 		panelTemplate: `
@@ -34,7 +35,9 @@
 				<i class="icon material-icons">expand_more</i>
 			</div>
 		</div>
-		<div class="content">PANEL_CONTENT</div>
+		<div class="content">
+			<div class="content-wrapper">PANEL_CONTENT</div>
+		</div>
 	</div>`,
 		descriptionTemplate: '<div class="description ellipsify">PANEL_DESCRIPTION</div>'
 	};
@@ -186,9 +189,10 @@
 		 * @param {HTMLElement} panel The panel to test
 		 */
 		_isOpen(panel) {
-			const panelClassAttr = panel.getAttribute("class");
-			const panelClasses = panelClassAttr.split(" ");
-			return panelClasses.includes("open");
+			return panel.classList.contains("open");
+			// const panelClassAttr = panel.getAttribute("class");
+			// const panelClasses = panelClassAttr.split(" ");
+			// return panelClasses.includes("open");
 		}
 
 		/**
@@ -214,15 +218,14 @@
 			if (this._isOpen(panel)) {
 				return;
 			}
-			const panelClassAttr = panel.getAttribute("class");
-			const panelClasses = panelClassAttr.split(" ");
-			const newClassAttr = panelClasses.concat("open").join(" ");
-			panel.setAttribute("class", newClassAttr);
-			const contentWrapper = panel.getElementsByClassName("content").item(0);
-			const actualContent = contentWrapper.querySelector("*");
-			const height = actualContent.getBoundingClientRect().height;
-			contentWrapper.style.height = `${height}px`;
+			panel.classList.add("open", "transitioning");
+			const content = panel.getElementsByClassName("content").item(0);
+			const contentWrapper = content.getElementsByClassName("content-wrapper").item(0);
+			const height = contentWrapper.getBoundingClientRect().height;
+			content.style.height = `${height}px`;
 			this._openedPanel = panel;
+			// After the transition, ensure that content height is auto to avoid having fixed height if the content grows
+			setTimeout(() => panel.classList.remove("transitioning"), TRANSITION_DURATION_MS);
 		}
 
 		/**
@@ -233,12 +236,11 @@
 			if (!this._isOpen(panel)) {
 				return;
 			}
-			const panelClassAttr = panel.getAttribute("class");
-			const panelClasses = panelClassAttr.split(" ");
-			const newClassAttr = panelClasses.filter(c => c !== "open").join(" ");
-			panel.setAttribute("class", newClassAttr);
-			const contentWrapper = panel.getElementsByClassName("content").item(0);
-			contentWrapper.style.height = "";
+			panel.classList.add("transitioning");
+			panel.classList.remove("open");
+			const content = panel.getElementsByClassName("content").item(0);
+			content.style.height = 0;
+			setTimeout(() => panel.classList.remove("transitioning"), TRANSITION_DURATION_MS);
 		}
 	}
 

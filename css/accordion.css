@@ -58,3 +58,5 @@
       .js-accordion > .panel.open > .content {
         margin-top: 12px;
         margin-bottom: 25px; }
+      .js-accordion > .panel.open:not(.transitioning) > .content {
+        height: auto; }
