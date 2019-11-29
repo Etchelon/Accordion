@@ -107,7 +107,7 @@ $yMargin: 30px;
 			}
 			&:not(.transitioning) {
 				> .content {
-					height: auto;
+					height: auto !important;
 				}
 			}
 		}

@@ -59,4 +59,4 @@
         margin-top: 12px;
         margin-bottom: 25px; }
       .js-accordion > .panel.open:not(.transitioning) > .content {
-        height: auto; }
+        height: auto !important; }
