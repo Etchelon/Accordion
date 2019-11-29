@@ -237,10 +237,12 @@
 				return;
 			}
 			panel.classList.add("transitioning");
-			panel.classList.remove("open");
-			const content = panel.getElementsByClassName("content").item(0);
-			content.style.height = 0;
-			setTimeout(() => panel.classList.remove("transitioning"), TRANSITION_DURATION_MS);
+			setTimeout(() => {
+				const content = panel.getElementsByClassName("content").item(0);
+				content.style.height = 0;
+				panel.classList.remove("open");
+				setTimeout(() => panel.classList.remove("transitioning"), TRANSITION_DURATION_MS);
+			});
 		}
 	}
 
